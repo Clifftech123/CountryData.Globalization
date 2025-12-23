@@ -10,4 +10,8 @@
     <Folder Include="Models\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Data\data.json" />
+  </ItemGroup>
+
 </Project>
