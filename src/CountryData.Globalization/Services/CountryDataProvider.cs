@@ -108,6 +108,23 @@ namespace CountryData.Globalization.Services
         private static readonly CultureInfo[] s_allSpecificCultures = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="CountryDataProvider"/> class with default data source.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// This constructor creates its own <see cref="CountryDataLoader"/> internally,
+        /// simplifying usage for developers who don't need custom data sources.
+        /// </para>
+        /// <para>
+        /// Construction time is minimal (typically &lt;50ms) as caches are built lazily.
+        /// Only the country lookup dictionary is built during construction.
+        /// </para>
+        /// </remarks>
+        public CountryDataProvider() : this(new CountryDataLoader())
+        {
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CountryDataProvider"/> class.
         /// </summary>
         /// <param name="loader">The loader used to retrieve country data from embedded resources.</param>

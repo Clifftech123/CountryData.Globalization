@@ -1,46 +1,68 @@
-# CountryData.Globalization 🌍
+# CountryData.Globalization
 
 [![.NET](https://img.shields.io/badge/.NET-10.0-512BD4)](https://dotnet.microsoft.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 A high-performance .NET library providing comprehensive country data, regions, cultures, currencies, and globalization information. Built for international applications with full country/region support.
 
-##  Features
+## Features
 
--  **High Performance** - O(1) dictionary lookups with lazy-loaded caches
+- **High Performance** - O(1) dictionary lookups with lazy-loaded caches
 - **250+ Countries** - Complete ISO 3166-1 country data
--  **Administrative Regions** - States, provinces, territories
--  **Currency Information** - Symbols, codes, names in multiple languages
--  **Flag Emojis** - Unicode emoji flags for all countries
--  **Full Globalization** - CultureInfo and RegionInfo integration
--  **Phone Codes** - International dialing codes
--  **Multi-Language** - Support for cultures and localized names
--  **DI Ready** - Built-in dependency injection support
--  **Thread-Safe** - All operations are thread-safe
--  **Zero Dependencies** - Lightweight, no external packages
+- **Administrative Regions** - States, provinces, territories
+- **Currency Information** - Symbols, codes, names in multiple languages
+- **Full Globalization** - CultureInfo and RegionInfo integration
+- **Phone Codes** - International dialing codes
+- **Multi-Language** - Support for cultures and localized names
+- **DI Ready** - Built-in dependency injection support
+- **Thread-Safe** - All operations are thread-safe
+- **Zero Dependencies** - Lightweight, no external packages
 
 ---
 
-##  Installation
+## Installation
 
-### .NET CLI
+### Option 1: With Dependency Injection Support (Recommended)
+
+Install both the core package and hosting package:
+
 ```bash
+# Core package
+dotnet add package CountryData.Globalization
+
+# Hosting package (for DI support)
 dotnet add package CountryData.Globalization.Hosting
 ```
 
-### Package Manager Console
+**Package Manager Console:**
 ```powershell
+Install-Package CountryData.Globalization
 Install-Package CountryData.Globalization.Hosting
+```
+
+### Option 2: Core Package Only
+
+If you don't need dependency injection support:
+
+```bash
+dotnet add package CountryData.Globalization
+```
+
+**Package Manager Console:**
+```powershell
+Install-Package CountryData.Globalization
 ```
 
 ---
 
-##  Quick Start
+## Quick Start
 
-### Register the Service
+### Using With Dependency Injection (Recommended)
+
+**Step 1: Register the service**
 
 ```csharp
-// Program.cs or Startup.cs
+// Program.cs
 using CountryData.Globalization.Hosting.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -51,7 +73,7 @@ builder.Services.AddCountryData();
 var app = builder.Build();
 ```
 
-### Use in Your Code
+**Step 2: Inject and use**
 
 ```csharp
 using CountryData.Globalization.Services;
@@ -60,7 +82,6 @@ public class CountryController : ControllerBase
 {
     private readonly ICountryDataProvider _countryProvider;
 
-    // Inject the provider
     public CountryController(ICountryDataProvider countryProvider)
     {
         _countryProvider = countryProvider;
@@ -75,62 +96,60 @@ public class CountryController : ControllerBase
         return Ok(new
         {
             Name = country.CountryName,
-            Flag = _countryProvider.GetCountryFlag(code),      // 🇺🇸
-            Currency = _countryProvider.GetCurrencySymbol(code), // $
-            PhoneCode = country.PhoneCode,                     // +1
+            Flag = _countryProvider.GetCountryFlag(code),
+            Currency = _countryProvider.GetCurrencySymbol(code),
+            PhoneCode = country.PhoneCode,
             IsMetric = _countryProvider.IsMetric(code)
         });
-    }
-
-    [HttpGet("states/{countryCode}")]
-    public IActionResult GetStates(string countryCode)
-    {
-        var regions = _countryProvider.GetRegionsByCountryCode(countryCode);
-        return Ok(regions.Select(r => new 
-        { 
-            Name = r.Name, 
-            Code = r.ShortCode 
-        }));
     }
 }
 ```
 
-### Complete Example
+### Using Without Dependency Injection
+
+If you're not using DI, create the provider directly:
 
 ```csharp
-public class CountryService
+using CountryData.Globalization.Services;
+
+// Simple - just create it (recommended)
+var provider = new CountryDataProvider();
+
+// Use the provider
+var country = provider.GetCountryByCode("US");
+Console.WriteLine($"{country.CountryName} - {provider.GetCountryFlag("US")}");
+
+// Get regions
+var states = provider.GetRegionsByCountryCode("US");
+foreach (var state in states)
 {
-    private readonly ICountryDataProvider _provider;
-
-    public CountryService(ICountryDataProvider provider)
-    {
-        _provider = provider;
-    }
-
-    public CountryInfo GetCountryInformation(string countryCode)
-    {
-        var country = _provider.GetCountryByCode(countryCode);
-        if (country == null) 
-            throw new ArgumentException($"Country '{countryCode}' not found");
-
-        return new CountryInfo
-        {
-            Name = country.CountryName,
-            Flag = _provider.GetCountryFlag(countryCode),
-            Currency = _provider.GetCurrencySymbol(countryCode),
-            CurrencyName = _provider.GetCurrencyEnglishName(countryCode),
-            PhoneCode = country.PhoneCode,
-            IsMetric = _provider.IsMetric(countryCode),
-            ThreeLetterCode = _provider.GetThreeLetterISORegionName(countryCode),
-            Regions = _provider.GetRegionsByCountryCode(countryCode).ToList()
-        };
-    }
+    Console.WriteLine($"{state.Name} ({state.ShortCode})");
 }
+
+// Get currency info
+var symbol = provider.GetCurrencySymbol("US");
+Console.WriteLine($"Currency: {symbol}");
+```
+
+**Important:** Reuse the same provider instance. Don't create new instances repeatedly as it's expensive.
+
+```csharp
+// GOOD - Singleton pattern
+public class CountryDataSingleton
+{
+    private static readonly Lazy<ICountryDataProvider> _instance = 
+        new Lazy<ICountryDataProvider>(() => new CountryDataProvider());
+
+    public static ICountryDataProvider Instance => _instance.Value;
+}
+
+// Usage
+var country = CountryDataSingleton.Instance.GetCountryByCode("US");
 ```
 
 ---
 
-##  API Reference
+## API Reference
 
 ### Country Data Methods
 
@@ -144,9 +163,9 @@ public class CountryService
 
 **Example:**
 ```csharp
-var country = _provider.GetCountryByCode("US");
-var flag = _provider.GetCountryFlag("JP");  // 🇯🇵
-var allCountries = _provider.GetAllCountries();
+var country = provider.GetCountryByCode("US");
+var flag = provider.GetCountryFlag("JP");
+var allCountries = provider.GetAllCountries();
 ```
 
 ### Phone Code Methods
@@ -158,8 +177,8 @@ var allCountries = _provider.GetAllCountries();
 
 **Example:**
 ```csharp
-var phoneCode = _provider.GetPhoneCodeByCountryShortCode("GB");  // "+44"
-var countries = _provider.GetCountriesByPhoneCode("+1");         // US, Canada, etc.
+var phoneCode = provider.GetPhoneCodeByCountryShortCode("GB");  // "+44"
+var countries = provider.GetCountriesByPhoneCode("+1");         // US, Canada, etc.
 ```
 
 ### Region Methods
@@ -171,8 +190,8 @@ var countries = _provider.GetCountriesByPhoneCode("+1");         // US, Canada, 
 
 **Example:**
 ```csharp
-var states = _provider.GetRegionsByCountryCode("US");
-var country = _provider.GetCountriesByRegion("California").FirstOrDefault();
+var states = provider.GetRegionsByCountryCode("US");
+var country = provider.GetCountriesByRegion("California").FirstOrDefault();
 ```
 
 ### Currency Methods
@@ -186,9 +205,9 @@ var country = _provider.GetCountriesByRegion("California").FirstOrDefault();
 
 **Example:**
 ```csharp
-var symbol = _provider.GetCurrencySymbol("US");           // "$"
-var name = _provider.GetCurrencyEnglishName("GB");        // "British Pound"
-var euroCountries = _provider.GetCountriesByCurrency("EUR");
+var symbol = provider.GetCurrencySymbol("US");           // "$"
+var name = provider.GetCurrencyEnglishName("GB");        // "British Pound"
+var euroCountries = provider.GetCountriesByCurrency("EUR");
 ```
 
 ### Culture & Globalization Methods
@@ -203,9 +222,9 @@ var euroCountries = _provider.GetCountriesByCurrency("EUR");
 
 **Example:**
 ```csharp
-var culture = _provider.GetCultureInfo("US");             // en-US culture
-var cultures = _provider.GetAllCulturesForCountry("CA");  // en-CA, fr-CA
-var frenchCA = _provider.GetSpecificCultureByCountryAndLanguage("CA", "fr");
+var culture = provider.GetCultureInfo("US");             // en-US culture
+var cultures = provider.GetAllCulturesForCountry("CA");  // en-CA, fr-CA
+var frenchCA = provider.GetSpecificCultureByCountryAndLanguage("CA", "fr");
 ```
 
 ### RegionInfo Methods
@@ -220,14 +239,14 @@ var frenchCA = _provider.GetSpecificCultureByCountryAndLanguage("CA", "fr");
 
 **Example:**
 ```csharp
-var regionInfo = _provider.GetRegionInfo("US");
-var isMetric = _provider.IsMetric("US");                  // false
-var iso3 = _provider.GetThreeLetterISORegionName("US");   // "USA"
+var regionInfo = provider.GetRegionInfo("US");
+var isMetric = provider.IsMetric("US");                  // false
+var iso3 = provider.GetThreeLetterISORegionName("US");   // "USA"
 ```
 
 ---
 
-##  Common Usage Examples
+## Common Usage Examples
 
 ### Example 1: Country Dropdown for Forms
 
@@ -273,22 +292,9 @@ public class PhoneNumberService
         var phoneCode = _provider.GetPhoneCodeByCountryShortCode(countryCode);
         return $"{phoneCode} {localNumber}";
     }
-
-    public List<CountryPhoneCode> GetAllPhoneCodes()
-    {
-        return _provider.GetAllCountries()
-            .Select(c => new CountryPhoneCode
-            {
-                Country = c.CountryName,
-                Code = c.PhoneCode,
-                Flag = _provider.GetCountryFlag(c.CountryShortCode)
-            })
-            .OrderBy(c => c.Country)
-            .ToList();
-    }
 }
 
-// Usage: FormatPhoneNumber("US", "555-1234") → "+1 555-1234"
+// Usage: FormatPhoneNumber("US", "555-1234") returns "+1 555-1234"
 ```
 
 ### Example 3: Address Form with Dynamic Regions
@@ -314,21 +320,6 @@ public class AddressFormService
             .OrderBy(r => r.Name)
             .ToList();
     }
-
-    public AddressMetadata GetCountryMetadata(string countryCode)
-    {
-        var country = _provider.GetCountryByCode(countryCode);
-        var regions = _provider.GetRegionsByCountryCode(countryCode).ToList();
-
-        return new AddressMetadata
-        {
-            CountryName = country.CountryName,
-            HasRegions = regions.Any(),
-            RegionLabel = regions.Any() ? "State/Province" : null,
-            PhoneCode = country.PhoneCode,
-            IsMetric = _provider.IsMetric(countryCode)
-        };
-    }
 }
 ```
 
@@ -346,22 +337,12 @@ public class CurrencyService
 
     public CurrencyInfo GetCurrencyInfo(string countryCode)
     {
-        var regionInfo = _provider.GetRegionInfo(countryCode);
-        
         return new CurrencyInfo
         {
             Symbol = _provider.GetCurrencySymbol(countryCode),
             EnglishName = _provider.GetCurrencyEnglishName(countryCode),
-            NativeName = _provider.GetCurrencyNativeName(countryCode),
-            ISOCode = regionInfo?.ISOCurrencySymbol
+            NativeName = _provider.GetCurrencyNativeName(countryCode)
         };
-    }
-
-    public List<string> GetCountriesUsingCurrency(string currencyCode)
-    {
-        return _provider.GetCountriesByCurrency(currencyCode)
-            .Select(c => $"{_provider.GetCountryFlag(c.CountryShortCode)} {c.CountryName}")
-            .ToList();
     }
 }
 ```
@@ -385,65 +366,16 @@ public class LocalizationService
             ?? _provider.GetCountryByCode(countryCode)?.CountryName 
             ?? "Unknown";
     }
-
-    public List<CountryLanguage> GetCountriesByLanguage(string languageCode)
-    {
-        return _provider.GetCountriesByLanguage(languageCode)
-            .Select(c => new CountryLanguage
-            {
-                Code = c.CountryShortCode,
-                Name = c.CountryName,
-                Flag = _provider.GetCountryFlag(c.CountryShortCode),
-                Cultures = _provider.GetAllCulturesForCountry(c.CountryShortCode)
-                    .Select(culture => culture.DisplayName)
-                    .ToList()
-            })
-            .ToList();
-    }
 }
 
 // Usage: 
-// GetLocalizedCountryName("JP", "fr-FR") → "Japon"
-// GetLocalizedCountryName("JP", "es-ES") → "Japón"
-```
-
-### Example 6: User Preferences Detection
-
-```csharp
-public class UserPreferencesService
-{
-    private readonly ICountryDataProvider _provider;
-
-    public UserPreferencesService(ICountryDataProvider provider)
-    {
-        _provider = provider;
-    }
-
-    public UserPreferences DetectUserPreferences()
-    {
-        var currentCountry = _provider.GetCurrentRegionCountry();
-        if (currentCountry == null) 
-            return GetDefaultPreferences();
-
-        var culture = _provider.GetCultureInfo(currentCountry.CountryShortCode);
-        
-        return new UserPreferences
-        {
-            CountryCode = currentCountry.CountryShortCode,
-            CountryName = currentCountry.CountryName,
-            CultureCode = culture?.Name ?? "en-US",
-            CurrencySymbol = _provider.GetCurrencySymbol(currentCountry.CountryShortCode),
-            IsMetricSystem = _provider.IsMetric(currentCountry.CountryShortCode),
-            PhoneCode = currentCountry.PhoneCode,
-            Flag = _provider.GetCountryFlag(currentCountry.CountryShortCode)
-        };
-    }
-}
+// GetLocalizedCountryName("JP", "fr-FR") returns "Japon"
+// GetLocalizedCountryName("JP", "es-ES") returns "Japón"
 ```
 
 ---
 
-##  Architecture & Performance
+## Architecture & Performance
 
 ### Performance Characteristics
 
@@ -474,26 +406,49 @@ All caches use **lazy initialization** with thread-safe `Lazy<T>`:
 
 ### Thread Safety
 
- **100% Thread-Safe**
+**100% Thread-Safe**
 - Immutable data collections
 - Thread-safe lazy initialization via `Lazy<T>`
 - No mutable state
 - Safe for concurrent access from multiple threads
-- **Registered as Singleton** by default
+- Registered as Singleton by default
 
 ---
 
+## Data Models
 
-
-##  Best Practices
-
-###  Recommended Usage
+### Country Model
 
 ```csharp
-// ✅ Register as singleton (automatic with AddCountryData)
+public class Country
+{
+    public string CountryName { get; set; }        // "United States"
+    public string CountryShortCode { get; set; }   // "US"
+    public string PhoneCode { get; set; }          // "+1"
+    public List<Region> Regions { get; set; }      // States/Provinces
+}
+```
+
+### Region Model
+
+```csharp
+public class Region
+{
+    public string Name { get; set; }         // "California"
+    public string? ShortCode { get; set; }   // "CA" (optional)
+}
+```
+
+---
+
+## Best Practices
+
+### Recommended Usage
+
+```csharp
+// GOOD - With DI (Recommended)
 builder.Services.AddCountryData();
 
-// ✅ Inject in your services
 public class MyService
 {
     private readonly ICountryDataProvider _provider;
@@ -504,33 +459,52 @@ public class MyService
     }
 }
 
-// ✅ Use O(1) optimized methods
-var country = _provider.GetCountryByCode("US");           // Fast!
-var countries = _provider.GetCountriesByPhoneCode("+1");  // Fast!
+// GOOD - Without DI (Simple instantiation)
+var provider = new CountryDataProvider();
+
+// GOOD - Without DI (Singleton pattern)
+public class CountryDataSingleton
+{
+    private static readonly Lazy<ICountryDataProvider> _instance = 
+        new Lazy<ICountryDataProvider>(() => new CountryDataProvider());
+
+    public static ICountryDataProvider Instance => _instance.Value;
+}
 ```
 
-### ❌ Anti-Patterns to Avoid
+### Anti-Patterns to Avoid
 
 ```csharp
-// ❌ DON'T manually instantiate the provider
+// BAD - Creating new instances repeatedly
+foreach (var item in items)
+{
+    var provider = new CountryDataProvider();  // Expensive!
+    var country = provider.GetCountryByCode(item.Code);
+}
 
-var provider = new CountryDataProvider(loader);  // Wrong! Use DI instead
+// GOOD - Reuse single instance
+var provider = new CountryDataProvider();
+foreach (var item in items)
+{
+    var country = provider.GetCountryByCode(item.Code);
+}
 
-// ❌ DON'T call GetCountriesByRegion in loops
+// BAD - Calling GetCountriesByRegion in loops
 foreach (var region in regions)
 {
     var country = provider.GetCountriesByRegion(region).FirstOrDefault();  // O(n×m)!
 }
 
-// ✅ Instead, build your own index:
-var regionIndex = _provider.GetAllCountries()
+// GOOD - Build your own index for repeated lookups
+var regionIndex = provider.GetAllCountries()
     .SelectMany(c => c.Regions.Select(r => new { Region = r.Name, Country = c }))
     .ToDictionary(x => x.Region, x => x.Country, StringComparer.OrdinalIgnoreCase);
 ```
 
----
 
-##  Contributing
+
+
+## Contributing
 
 Contributions are welcome! Please:
 
@@ -542,19 +516,24 @@ Contributions are welcome! Please:
 
 ---
 
-##  License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-##  Acknowledgments
+## Acknowledgments
 
 - Country data based on **ISO 3166-1** standards
 - Culture and region information from .NET `CultureInfo` and `RegionInfo`
 - Flag emojis using **Unicode regional indicator symbols**
 
 ---
+
+
+
+
+
 
 
 
