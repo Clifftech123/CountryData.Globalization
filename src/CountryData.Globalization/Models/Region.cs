@@ -12,7 +12,8 @@
 
         /// <summary>
         /// Gets or sets the region short code (e.g., "CA", "ON", "13").
+        /// May be null or empty for regions without official short codes.
         /// </summary>
-        public required string ShortCode { get; set; }
+        public string? ShortCode { get; set; }
     }
 }
