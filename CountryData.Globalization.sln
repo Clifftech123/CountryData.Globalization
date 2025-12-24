@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CountryData.Globalization.H
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CountryData.Globalization.Tests", "tests\CountryData.Globalization.Tests\CountryData.Globalization.Tests.csproj", "{85F3DFF2-F9D9-4C4D-9467-DA4394A53678}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{50E446C5-FDED-4955-A9A9-0DA9341A70EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
