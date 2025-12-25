@@ -36,8 +36,9 @@ jobs:
     - name: Verify Git tags for MinVer
       run: |
         git fetch --tags --force
-        git describe --tags
-        git tag --points-at HEAD
+        echo "Checking for tags..."
+        git describe --tags 2>/dev/null || echo "No tags found yet - this is expected for first release"
+        git tag --points-at HEAD || echo "No tag at current commit"
 
     - name: Restore dependencies
       run: dotnet restore
