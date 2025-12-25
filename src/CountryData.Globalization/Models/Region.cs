@@ -8,7 +8,7 @@
         /// <summary>
         /// Gets or sets the full region name (e.g., "California", "Ontario", "Tokyo").
         /// </summary>
-        public required string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the region short code (e.g., "CA", "ON", "13").

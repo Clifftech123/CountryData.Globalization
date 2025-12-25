@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!-- Target Frameworks - Modern .NET -->
-    <TargetFrameworks>netstandard2.1;net8.0;net9.0;net10.0</TargetFrameworks>
+    <!-- Target Frameworks - Broad compatibility (.NET Standard 2.0 works with .NET Framework 4.6.1+, .NET Core 2.0+, Unity, Xamarin) -->
+    <TargetFrameworks>netstandard2.0;net6.0;net8.0;net10.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -46,7 +46,8 @@ Initial release v1.0.0:
 - AddCountryData() extension method
 - Singleton lifetime management for ICountryDataProvider
 - Full ASP.NET Core integration support
-- Multi-framework support (.NET Standard 2.1, .NET 8-10)
+- Multi-framework support (.NET Standard 2.0+, .NET 6, 8, 10)
+- Works with .NET Framework 4.6.1+, .NET Core 2.0+, Unity, Xamarin
     </PackageReleaseNotes>
 
     <!-- Package Icon (uncomment when you add an icon) -->

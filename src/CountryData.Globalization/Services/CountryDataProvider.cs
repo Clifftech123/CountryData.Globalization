@@ -373,7 +373,17 @@ namespace CountryData.Globalization.Services
             try
             {
                 var cultureName = $"{languageCode}-{shortCode}";
-                return CultureInfo.GetCultureInfo(cultureName);
+                var culture = CultureInfo.GetCultureInfo(cultureName);
+
+                // Validate that the culture actually exists in the system
+                // This ensures consistent behavior across Windows/Linux
+                var allCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
+                if (!allCultures.Any(c => c.Name.Equals(cultureName, StringComparison.OrdinalIgnoreCase)))
+                {
+                    return null;
+                }
+
+                return culture;
             }
             catch
             {

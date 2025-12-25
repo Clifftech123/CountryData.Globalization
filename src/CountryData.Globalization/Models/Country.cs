@@ -2,24 +2,24 @@
 {
     /// <summary>
     /// Represents a country with its associated data including ISO codes, names, phone codes, regions, and Unicode emoji flag.
-    /// 
+    ///
     /// </summary>
     public class Country
     {
         /// <summary>
         /// Gets or sets the full country name (e.g., "United States", "Canada", "Japan").
         /// </summary>
-        public required string CountryName { get; set; }
+        public string CountryName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the international phone code for the country (e.g., "+1", "+44", "+81").
         /// </summary>
-        public required string PhoneCode { get; set; }
+        public string PhoneCode { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the ISO 3166-1 alpha-2 country code (e.g., "US", "CA", "JP").
         /// </summary>
-        public required string CountryShortCode { get; set; }
+        public string CountryShortCode { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the Unicode emoji flag representing the country (e.g., "🇺🇸", "🇨🇦", "🇯🇵").
