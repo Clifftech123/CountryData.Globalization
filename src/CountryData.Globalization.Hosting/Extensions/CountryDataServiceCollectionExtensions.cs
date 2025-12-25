@@ -5,6 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CountryData.Globalization.Hosting.Extensions
 {
+    /// <summary>
+    /// Extension methods for registering CountryData services in the dependency injection container.
+    /// </summary>
     public static class CountryDataServiceCollectionExtensions
     {
         /// <summary>

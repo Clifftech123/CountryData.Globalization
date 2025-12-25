@@ -1,10 +1,105 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <!-- Target Frameworks - Modern .NET -->
+    <TargetFrameworks>netstandard2.1;net8.0;net9.0;net10.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <!-- Assembly Information -->
+    <AssemblyName>CountryData.Globalization</AssemblyName>
+    <RootNamespace>CountryData.Globalization</RootNamespace>
+
+    <!-- Package Identity -->
+    <PackageId>CountryData.Globalization</PackageId>
+    <!-- Version is automatically determined by MinVer from git tags -->
+
+    <!-- Package Metadata for NuGet -->
+    <Title>CountryData.Globalization - Comprehensive Country Data Library</Title>
+    <Product>CountryData.Globalization</Product>
+    <Description>A high-performance .NET library providing comprehensive country data, regions, cultures, currencies, and globalization information. Includes 250+ countries with ISO 3166-1 codes, administrative regions (states/provinces), currency information with multi-language support, phone codes, CultureInfo and RegionInfo integration. Features O(1) dictionary lookups with lazy-loaded caches, full thread-safety, and zero external dependencies. Perfect for international applications, address forms, phone number validation, currency conversion, and multi-language support.</Description>
+    <PackageTags>country;countries;globalization;internationalization;i18n;l10n;iso-3166;regions;states;provinces;currency;phone-codes;culture;cultureinfo;regioninfo;flags;world-data;geography;localization;dotnet;netstandard</PackageTags>
+    <Summary>High-performance .NET library for country data, regions, cultures, and currencies with O(1) lookups</Summary>
+
+    <!-- Authors and Copyright -->
+    <Authors>Isaiah Clifford Opoku </Authors>
+    <Company>Isaiah Clifford</Company>
+    <Copyright>Copyright © Isaiah Clifford Opo 2025-2026</Copyright>
+
+    <!-- Repository and Project URLs -->
+    <RepositoryUrl>https://github.com/Clifftech123/CountryData.Globalization</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/Clifftech123/CountryData.Globalization</PackageProjectUrl>
+
+    <!-- Documentation -->
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- License -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <!-- Package Release Notes -->
+    <PackageReleaseNotes>
+Initial release v1.0.0:
+- 250+ countries with comprehensive ISO 3166-1 data
+- Administrative regions (states, provinces, territories)
+- Currency information with multi-language support
+- Phone codes and international dialing codes
+- Full CultureInfo and RegionInfo integration
+- O(1) dictionary lookups with lazy-loaded caches
+- Thread-safe operations with immutable data collections
+- Zero external dependencies
+- Multi-framework support (.NET Standard 2.1, .NET 8-10)
+- Built-in dependency injection support via CountryData.Globalization.Hosting package
+    </PackageReleaseNotes>
+
+    <!-- Package Icon (uncomment when you add an icon) -->
+    <!-- <PackageIcon>icon.png</PackageIcon> -->
+
+    <!-- Symbols and Source -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <IncludeSource>false</IncludeSource>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Source Link for debugging -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <DebugType>embedded</DebugType>
+
+    <!-- Enable Central Package Management -->
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+
+    <!-- Package Quality -->
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
+
+  <!-- Release Configuration -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Optimize>true</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <!-- Debug Configuration -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <!-- MinVer Configuration -->
+  <PropertyGroup>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
+  </PropertyGroup>
+
+  <!-- Package References from Central Package Management -->
+  <ItemGroup>
+    <PackageReference Include="MinVer" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Models\" />
@@ -14,4 +109,15 @@
     <EmbeddedResource Include="Data\data.json" />
   </ItemGroup>
 
+  <!-- Include README in package -->
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <!-- Include Icon in package (uncomment when icon is added) -->
+  <!-- <ItemGroup>
+    <None Include="icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup> -->
+
 </Project>
+

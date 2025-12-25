@@ -1,17 +1,118 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <!-- Target Frameworks - Modern .NET -->
+    <TargetFrameworks>netstandard2.1;net8.0;net9.0;net10.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <!-- Assembly Information -->
+    <AssemblyName>CountryData.Globalization.Hosting</AssemblyName>
+    <RootNamespace>CountryData.Globalization.Hosting</RootNamespace>
+
+    <!-- Package Identity -->
+    <PackageId>CountryData.Globalization.Hosting</PackageId>
+    <!-- Version is automatically determined by MinVer from git tags -->
+
+    <!-- Package Metadata for NuGet -->
+    <Title>CountryData.Globalization.Hosting - Dependency Injection Extensions</Title>
+    <Product>CountryData.Globalization.Hosting</Product>
+    <Description>Dependency injection extensions for CountryData.Globalization library. Provides seamless integration with Microsoft.Extensions.DependencyInjection for ASP.NET Core and other .NET applications. Includes service registration extensions and lifetime management for ICountryDataProvider. Install this package alongside CountryData.Globalization to enable DI support with AddCountryData() extension method.</Description>
+    <PackageTags>country;globalization;dependency-injection;di;hosting;aspnetcore;extensions;microsoft-extensions;service-collection;ioc;dotnet;netstandard</PackageTags>
+    <Summary>Dependency injection extensions for CountryData.Globalization with ASP.NET Core integration</Summary>
+
+    <!-- Authors and Copyright -->
+    <Authors>Isaiah Clifford Opoku</Authors>
+    <Company>Isaiah Clifford</Company>
+    <Copyright>Copyright © Isaiah Clifford Opoku 2024-2025</Copyright>
+
+    <!-- Repository and Project URLs -->
+    <RepositoryUrl>https://github.com/Clifftech123/CountryData.Globalization</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/Clifftech123/CountryData.Globalization</PackageProjectUrl>
+
+    <!-- Documentation -->
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- License -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <!-- Package Release Notes -->
+    <PackageReleaseNotes>
+Initial release v1.0.0:
+- Service collection extensions for easy DI registration
+- AddCountryData() extension method
+- Singleton lifetime management for ICountryDataProvider
+- Full ASP.NET Core integration support
+- Multi-framework support (.NET Standard 2.1, .NET 8-10)
+    </PackageReleaseNotes>
+
+    <!-- Package Icon (uncomment when you add an icon) -->
+    <!-- <PackageIcon>icon.png</PackageIcon> -->
+
+    <!-- Symbols and Source -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <IncludeSource>false</IncludeSource>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Source Link for debugging -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <DebugType>embedded</DebugType>
+
+    <!-- Enable Central Package Management -->
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+
+    <!-- Package Quality -->
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
+  <!-- Release Configuration -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Optimize>true</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <!-- Debug Configuration -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <!-- MinVer Configuration -->
+  <PropertyGroup>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
+  </PropertyGroup>
+
+  <!-- Package References from Central Package Management -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="MinVer" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
 
+  <!-- Project References - Included as NuGet package dependency when packing -->
   <ItemGroup>
-    <ProjectReference Include="..\CountryData.Globalization\CountryData.Globalization.csproj" />
+    <ProjectReference Include="..\CountryData.Globalization\CountryData.Globalization.csproj">
+      <!-- This ensures Core is included as a NuGet package dependency when packing -->
+      <PrivateAssets>None</PrivateAssets>
+    </ProjectReference>
   </ItemGroup>
+
+  <!-- Include README in package -->
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <!-- Include Icon in package (uncomment when icon is added) -->
+  <!-- <ItemGroup>
+    <None Include="icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup> -->
 
 </Project>
