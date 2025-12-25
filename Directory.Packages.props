@@ -10,6 +10,11 @@
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
   </ItemGroup>
 
+  <!-- Core Libraries (for .NET Standard support) -->
+  <ItemGroup>
+    <PackageVersion Include="System.Text.Json" Version="8.0.5" />
+  </ItemGroup>
+
   <!-- Microsoft Extensions -->
   <ItemGroup>
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />

@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!-- Target Frameworks - Modern .NET -->
-    <TargetFrameworks>netstandard2.1;net8.0;net9.0;net10.0</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
+    
+    <TargetFrameworks>netstandard2.0;net6.0;net8.0;net10.0</TargetFrameworks>
+\    <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
@@ -49,8 +49,9 @@ Initial release v1.0.0:
 - Full CultureInfo and RegionInfo integration
 - O(1) dictionary lookups with lazy-loaded caches
 - Thread-safe operations with immutable data collections
-- Zero external dependencies
-- Multi-framework support (.NET Standard 2.1, .NET 8-10)
+- Minimal external dependencies (only System.Text.Json)
+- Multi-framework support (.NET Standard 2.0+, .NET 6, 8, 10)
+- Works with .NET Framework 4.6.1+, .NET Core 2.0+, Unity, Xamarin
 - Built-in dependency injection support via CountryData.Globalization.Hosting package
     </PackageReleaseNotes>
 
@@ -97,6 +98,7 @@ Initial release v1.0.0:
 
   <!-- Package References from Central Package Management -->
   <ItemGroup>
+    <PackageReference Include="System.Text.Json" />
     <PackageReference Include="MinVer" PrivateAssets="All" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
