@@ -12,7 +12,7 @@
 
   <!-- Core Libraries (for .NET Standard support) -->
   <ItemGroup>
-    <PackageVersion Include="System.Text.Json" Version="8.0.5" />
+    <PackageVersion Include="System.Text.Json" Version="10.0.1" />
   </ItemGroup>
 
   <!-- Microsoft Extensions -->
