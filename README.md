@@ -137,7 +137,7 @@ Console.WriteLine($"Currency: {symbol}");
 // GOOD - Singleton pattern
 public class CountryDataSingleton
 {
-    private static readonly Lazy<ICountryDataProvider> _instance = 
+    private static readonly Lazy<ICountryDataProvider> _instance =
         new Lazy<ICountryDataProvider>(() => new CountryDataProvider());
 
     public static ICountryDataProvider Instance => _instance.Value;
@@ -362,13 +362,13 @@ public class LocalizationService
     public string GetLocalizedCountryName(string countryCode, string languageCode)
     {
         var culture = new CultureInfo(languageCode);
-        return _provider.GetDisplayName(countryCode, culture) 
-            ?? _provider.GetCountryByCode(countryCode)?.CountryName 
+        return _provider.GetDisplayName(countryCode, culture)
+            ?? _provider.GetCountryByCode(countryCode)?.CountryName
             ?? "Unknown";
     }
 }
 
-// Usage: 
+// Usage:
 // GetLocalizedCountryName("JP", "fr-FR") returns "Japon"
 // GetLocalizedCountryName("JP", "es-ES") returns "Japón"
 ```
@@ -452,7 +452,7 @@ builder.Services.AddCountryData();
 public class MyService
 {
     private readonly ICountryDataProvider _provider;
-    
+
     public MyService(ICountryDataProvider provider)
     {
         _provider = provider;
@@ -465,7 +465,7 @@ var provider = new CountryDataProvider();
 // GOOD - Without DI (Singleton pattern)
 public class CountryDataSingleton
 {
-    private static readonly Lazy<ICountryDataProvider> _instance = 
+    private static readonly Lazy<ICountryDataProvider> _instance =
         new Lazy<ICountryDataProvider>(() => new CountryDataProvider());
 
     public static ICountryDataProvider Instance => _instance.Value;
@@ -501,8 +501,22 @@ var regionIndex = provider.GetAllCountries()
     .ToDictionary(x => x.Region, x => x.Country, StringComparer.OrdinalIgnoreCase);
 ```
 
+## Country Insights
+The `CountryInsights` service provides derived data from the existing country sets.
 
+### Usage
+```csharp
+var insights = new CountryInsights(dataProvider);
 
+// Check if a country is multilingual
+var isMulti = insights.IsMultilingualCountry("GH"); // Returns true
+
+// Get detailed language info
+var languages = insights.GetCountryLanguages("GH");
+
+// Returns the first culture found for this region
+var priCul = GetPrimaryCulture("GH");
+```
 
 ## Contributing
 
