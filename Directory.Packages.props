@@ -7,7 +7,7 @@
   <!-- Build Tools -->
   <ItemGroup>
     <PackageVersion Include="MinVer" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.103" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.201" />
   </ItemGroup>
 
   <!-- Core Libraries (for .NET Standard support) -->
